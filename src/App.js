@@ -12,48 +12,43 @@ class App extends Component {
     this.state = {
       sessionTime: 25,
       breakTime: 5,
-      time: 25 * 60,
+      timeSeconds: 25 * 60,
       clockTime: "25:00",
       timerId: "",
       timerState: "Session",
       timerIsRunning: false
     };
   }
-  secondToTimeFormater(second) {
-    function formatDigit(num) {
-      return num < 10 ? "0" + num : num;
-    }
-    if (second < 1) {
+  secondsToMinuteFormat(seconds) {
+    if (seconds <= 0) {
       return "00:00";
     }
-    let s = second;
-    let m = Math.floor(s / 60);
-    s -= m * 60;
-    return formatDigit(m) + ":" + formatDigit(s);
+    const formatDigit = num => (num < 10 ? "0" + num : num);
+    let minute = Math.floor(seconds / 60);
+    return formatDigit(minute) + ":" + formatDigit(seconds - minute * 60);
   }
   timer = () => {
-    let time = this.state.time;
-    let timerId = setTimeout(this.timer, 500);
-    if (time >= 0) {
+    let timerId = setTimeout(this.timer, 1000);
+    if (this.state.timeSeconds >= 0) {
       this.setState({
-        clockTime: this.secondToTimeFormater(time),
+        clockTime: this.secondsToMinuteFormat(this.state.timeSeconds),
         timerId: timerId,
-        time: time - 1
+        timeSeconds: this.state.timeSeconds - 1
       });
     } else {
       this.audioRef.current.play();
       this.state.timerState === "Session"
         ? this.setState({
             timerState: "Break",
-            time: this.state.breakTime * 60,
+            timeSeconds: this.state.breakTime * 60,
             timerId: timerId,
-            clockTime: this.secondToTimeFormater(this.state.breakTime * 60)
+            clockTime: this.secondsToMinuteFormat(this.state.breakTime * 60)
           })
         : this.setState({
             timerState: "Session",
-            time: this.state.sessionTime * 60,
+            timeSeconds: this.state.sessionTime * 60,
             timerId: timerId,
-            clockTime: this.secondToTimeFormater(this.state.sessionTime * 60)
+            clockTime: this.secondsToMinuteFormat(this.state.sessionTime * 60)
           });
     }
   };
@@ -79,7 +74,7 @@ class App extends Component {
       this.setState({
         sessionTime: 25,
         breakTime: 5,
-        time: 25 * 60,
+        timeSeconds: 25 * 60,
         clockTime: "25:00",
         timerId: "",
         timerState: "Session",
@@ -107,32 +102,44 @@ class App extends Component {
       this.setState({
         sessionTime,
         breakTime,
-        time: sessionTime * 60,
-        clockTime: this.secondToTimeFormater(sessionTime * 60)
+        timeSeconds: sessionTime * 60,
+        clockTime: this.secondsToMinuteFormat(sessionTime * 60)
       });
     }
   };
   render() {
     return (
       <React.Fragment>
-      <section className="container">
-        <Break breakTime={this.state.breakTime} onClick={this.handleClick} />
-        <Session
-          sessionTime={this.state.sessionTime}
-          onClick={this.handleClick}
-        />
-        <Clock
-          time={this.state.clockTime}
-          timerState={this.state.timerState}
-          onClick={this.handleClick}
-        />
-        <audio
-          id="beep"
-          ref={this.audioRef}
-          src="https://dl.dropboxusercontent.com/s/54zjmbw2rwpcgir/beep.mp3"
-        />
-      </section>
-      <div className="about">Coded and designed by <a href="https://github.com/yakhousam/Promodoro-Clock">yakhousam</a></div>
+        <h1 id="title" >Promodoro Clock</h1>
+        <p className="author-2">
+            Coded and designed by 
+            <a href="https://github.com/yakhousam/Promodoro-Clock">yakhousam
+            </a>
+          </p>
+        <section className="container">
+        <div className="about">
+          <p className="author">
+            Coded and designed by <br/> 
+            <a href="https://github.com/yakhousam/Promodoro-Clock">yakhousam
+            </a>
+          </p>
+        </div>
+          <Break breakTime={this.state.breakTime} onClick={this.handleClick} />
+          <Session
+            sessionTime={this.state.sessionTime}
+            onClick={this.handleClick}
+          />
+          <Clock
+            time={this.state.clockTime}
+            timerState={this.state.timerState}
+            onClick={this.handleClick}
+          />
+          <audio
+            id="beep"
+            ref={this.audioRef}
+            src="https://dl.dropboxusercontent.com/s/54zjmbw2rwpcgir/beep.mp3"
+          />
+        </section>
       </React.Fragment>
     );
   }
