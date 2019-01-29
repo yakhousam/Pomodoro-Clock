@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Break from "./components/Break";
 import Clock from "./components/Clock";
 import Session from "./components/Session";
-
+import Beep from "./beep.mp3"
 import "./App.css";
 
 class App extends Component {
@@ -110,17 +110,17 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <h1 id="title" >Promodoro Clock</h1>
+        <h1 id="title" >Pomodoro Clock</h1>
         <p className="author-2">
             Coded and designed by 
-            <a href="https://github.com/yakhousam/Promodoro-Clock">yakhousam
+            <a href="https://github.com/yakhousam/Pomodoro-Clock">yakhousam
             </a>
           </p>
         <section className="container">
         <div className="about">
           <p className="author">
             Coded and designed by <br/> 
-            <a href="https://github.com/yakhousam/Promodoro-Clock">yakhousam
+            <a href="https://github.com/yakhousam/Pomodoro-Clock">yakhousam
             </a>
           </p>
         </div>
@@ -137,7 +137,7 @@ class App extends Component {
           <audio
             id="beep"
             ref={this.audioRef}
-            src="https://dl.dropboxusercontent.com/s/54zjmbw2rwpcgir/beep.mp3"
+            src={Beep}
           />
         </section>
       </React.Fragment>
